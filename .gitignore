@@ -1,0 +1,4 @@
+*.hi
+*.o
+*.jsmod
+ffi-objref/objref.js
