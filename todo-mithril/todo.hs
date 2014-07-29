@@ -5,6 +5,7 @@ import Haste
 import Haste.Foreign
 import System.IO.Unsafe
 import Unsafe.Coerce
+import Debug.Trace 
 
 data TodoContainerElem = TodoContainerElem {
 	allEl         :: [Elem]
@@ -51,20 +52,18 @@ renderList = ffi "(function(el,v) { Mithril.render(el,v); })"
 
 renderHeader :: IO VirtualElement
 renderHeader = do
-	m "header" (Just $ newAttrs [ ("id", "header") ]) 
+	m "header#header" Nothing
 	  (Just $ ChildList [ 
 	  	ChildVirt $ unsafeM "h1" Nothing (Just $ ChildText "todos"),
-	  	ChildVirt $ unsafeM "input" (Just $ newAttrs [ ("id", "new-todo"), 
-	  												   ("placeholder", "What needs to be done?"), 
-	  												   ("autofocus", "autofocus") ]) Nothing ])
+	  	ChildVirt $ unsafeM "input#new-todo[placeholder='What needs to be done?']" Nothing Nothing ])
 
 renderMainSection :: IO VirtualElement
 renderMainSection = do
-	m "section" (Just $ newAttrs [ ("id", "main") ])
+	m "section#main" Nothing
 	  (Just $ ChildList [
-	  	ChildVirt $ unsafeM "input" (Just $ newAttrs [ ("id", "toggle-all"), ("type", "checkbox")] ) Nothing,
-	  	ChildVirt $ unsafeM "label" (Just $ newAttrs [ ("for", "toggle-all") ]) (Just $ ChildText "Mark all as complete"),
-	  	ChildVirt $ unsafeM "ul" (Just $ newAttrs [ ("id", "todo-list") ] ) Nothing ])
+	  	ChildVirt $ unsafeM "input#toggle-all[type=checkbox]" Nothing Nothing,
+	  	ChildVirt $ unsafeM "label[for=toggle-all]" Nothing (Just $ ChildText "Mark all as complete"),
+	  	ChildVirt $ unsafeM "ul#todo-list" Nothing Nothing ])
 
 newFilterElem :: JSString -> VirtualElement
 newFilterElem text = do
@@ -73,15 +72,15 @@ newFilterElem text = do
 
 renderFooter :: IO VirtualElement
 renderFooter = do
-	m "footer" (Just $ newAttrs [ ("id", "footer") ] )
+	m "footer#footer" Nothing
 	  (Just $ ChildList [
-	  	ChildVirt $ unsafeM "span" (Just $ newAttrs [ ("id", "todo-count") ] )
+	  	ChildVirt $ unsafeM "span#todo-count" Nothing
 	  	  (Just $ ChildList [
 	  	  	ChildVirt $ unsafeM "strong" Nothing (Just $ ChildText "0"),
 	  	  	ChildText " items left" ]),
-	  	ChildVirt $ unsafeM "ul" (Just $ newAttrs [ ("id", "filters") ] )
+	  	ChildVirt $ unsafeM "ul#filters" Nothing
 	  	  (Just $ ChildList [ ChildVirt (newFilterElem "All"), ChildVirt (newFilterElem "Active"), ChildVirt (newFilterElem "Completed") ]),
-	  	ChildVirt $ unsafeM "button" (Just $ newAttrs [ ("id", "clear-completed") ] ) 
+	  	ChildVirt $ unsafeM "button#clear-completed" Nothing
 	  	  (Just $ ChildText "Clear completed (0)") ])
 
 main :: IO ()
