@@ -1,52 +1,52 @@
 <html>
-	<head>
-		<title>FFI - Export Haskell function to JS</title>
-		<script src="export.js"></script>
-		<script type="text/javascript">
+    <head>
+        <title>FFI - Export Haskell function to JS</title>
+        <script src="export.js"></script>
+        <script type="text/javascript">
             function add() {
-            	var c = Haste.addInt(document.getElementById('a').value, document.getElementById('b').value);
-            	var curried = Haste.addInt(document.getElementById('a').value);
-            	var d = curried(document.getElementById('b').value);
-            	document.getElementById('c').innerHTML = c;
-            	document.getElementById('d').innerHTML = d;
+                var c = Haste.addInt(document.getElementById('a').value, document.getElementById('b').value);
+                var curried = Haste.addInt(document.getElementById('a').value);
+                var d = curried(document.getElementById('b').value);
+                document.getElementById('c').innerHTML = c;
+                document.getElementById('d').innerHTML = d;
             }
 
             function addAsync() {
-            	console.log("pre-addIntAsync");
-            	var c = Haste.addIntAsync(document.getElementById('2a').value, 
-            		                      document.getElementById('2b').value, 
-            		                      function(result) {
-            		console.log("in callback");
+                console.log("pre-addIntAsync");
+                var c = Haste.addIntAsync(document.getElementById('2a').value, 
+                                          document.getElementById('2b').value, 
+                                          function(result) {
+                    console.log("in callback");
                     document.getElementById('2c').innerHTML = A(result, [])[1];
-            	});
-            	console.log("post-addIntAsync");
+                });
+                console.log("post-addIntAsync");
             }
-		</script>
-	</head>
-	<body>
+        </script>
+    </head>
+    <body>
 
         <h2>Synchronous</h2>
-		<form>
-			<input type="text" id="a"> + 
-			<input type="text" id="b"> =
-			<p>
-			  result from Haste.addInt: <span id="c"></span>
-			</p>
-			<p>
-			  curried result from Haste.addInt: <span id="d"></span>
-			</p>
-			<button onclick="add(); return false;">add</button>
-		</form>
+        <form>
+            <input type="text" id="a"> + 
+            <input type="text" id="b"> =
+            <p>
+              result from Haste.addInt: <span id="c"></span>
+            </p>
+            <p>
+              curried result from Haste.addInt: <span id="d"></span>
+            </p>
+            <button onclick="add(); return false;">add</button>
+        </form>
 
-		<h2>Async w/callback</h2>
-		<form>
-			<input type="text" id="2a"> + 
-			<input type="text" id="2b"> =
-			<p>
-			  result from Haste.addIntAsync: <span id="2c"></span>
-			</p>
-			<button onclick="addAsync(); return false;">add</button>
-		</form>
-		
-	</body>
+        <h2>Async w/callback</h2>
+        <form>
+            <input type="text" id="2a"> + 
+            <input type="text" id="2b"> =
+            <p>
+              result from Haste.addIntAsync: <span id="2c"></span>
+            </p>
+            <button onclick="addAsync(); return false;">add</button>
+        </form>
+        
+    </body>
 </html>
