@@ -23,9 +23,9 @@ nowMillis = ffi $ toJSString "(function() { return new Date().getTime(); })"
 -- this doesn't compile:
 --foreign import ccall "(function(t) { return t.toggle();})" toggleObj2 :: ToggleObj -> IO (Bool)
 
--- TODO: make this strict
 benchIO :: (Int -> IO ()) -> IO (Float)
 benchIO fx = do
+	writeLog "benchIO start"
 	start <- nowMillis
 	_ <- fx 1
 	end <- nowMillis
@@ -46,22 +46,25 @@ objref [t1, t2, bench] = do
 		setProp t2 "innerHTML" $ toString "toggle 2: " ++ (show b)
 
 	onEvent bench OnClick $ \_ _ -> do
-		let n = 1000000
+		let n = 400000
+		writeLog "dingle"
 		setProp bench "innerHTML" $ toString "benchmarking ccall"
+		getProp bench "innerHTML" >>= writeLog
+		x <- newTextElem "benchmarking ccall nextTextElem"
+		setChildren bench [x]
 		el1 <- benchIO (\ _ -> mapM_ (\ _ -> toggle tog1) [1..n])
+		writeLog "dingle 2"
 		setProp bench "innerHTML" $ toString "benchmarking ffi"
+		getProp bench "innerHTML" >>= writeLog
 		el2 <- benchIO (\ _ -> mapM_ (\ _ -> toggleObj tog2) [1..n])
-		setProp bench "innerHTML" $ toString "iterations: " ++ (show n) 
-			++ "<br>ccall: " ++ (show el1) 
-			++ "<br>ffi: " ++ (show el2) 
-			++ "<br>click to run again"
-
-		-- TODO: uncomment once benchIO is made strict
-		-- right now el1 and el2 are being evaluated more than once
-		
 		--setProp bench "innerHTML" $ toString "iterations: " ++ (show n) 
 		--	++ "<br>ccall: " ++ (show el1) 
-		--	++ " ms (" ++ (show ((el1/n)*1000)) ++ " us/call)"
 		--	++ "<br>ffi: " ++ (show el2) 
-		--	++ " ms (" ++ (show ((el2/n)*1000)) ++ " us/call)"
 		--	++ "<br>click to run again"
+
+		setProp bench "innerHTML" $ toString "iterations: " ++ (show n) 
+			++ "<br>ccall: " ++ (show el1) 
+			++ " ms (" ++ (show ((el1/n)*1000)) ++ " us/call)"
+			++ "<br>ffi: " ++ (show el2) 
+			++ " ms (" ++ (show ((el2/n)*1000)) ++ " us/call)"
+			++ "<br>click to run again"
