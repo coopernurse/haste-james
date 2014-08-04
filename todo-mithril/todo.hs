@@ -15,9 +15,9 @@ newtype VirtualElement = VirtualElement JSAny deriving (Pack, Unpack)
 newtype Attributes = Attributes JSAny deriving (Pack, Unpack)
 
 data Children = ChildText    JSString |
-				ChildVirt    VirtualElement |
-				ChildSubtree JSString |
-				ChildList    [Children]
+                ChildVirt    VirtualElement |
+                ChildSubtree JSString |
+                ChildList    [Children]
 
 -- copied from Haste's Foreign.hs
 lst2arr :: Opaque [Unpacked] -> Unpacked
